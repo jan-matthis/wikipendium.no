@@ -40,7 +40,10 @@ class ArticleForm(ModelForm):
                                 ]
 
     def clean(self):
-        super(ArticleForm, self)
+        super(ArticleForm, self).clean()
+        self.cleaned_data['content'] = (self.cleaned_data.get('content', '')
+                                        .replace('\r\n', '\n')
+                                        .replace('\r', '\n'))
         return self.cleaned_data
 
 
@@ -97,7 +100,7 @@ class EditArticleForm(ArticleForm):
         self.fields.keyOrder.append('parent_id')
 
     def clean(self):
-        super(ArticleForm, self)
+        super(EditArticleForm, self).clean()
         self.merge_contents_if_needed()
         return self.cleaned_data
 
